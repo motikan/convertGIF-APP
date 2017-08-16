@@ -10,3 +10,7 @@ composer.lock
 vendor/
 !vendor/README.md
 !vendor/ZF2/
+*.jpg
+*.jpeg
+*.png
+*.gif
