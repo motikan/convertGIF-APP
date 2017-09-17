@@ -11,6 +11,7 @@
         "php": ">=5.3.3",
         "zendframework/zendframework": "~2.4.11",
         "sybio/gif-creator": "^1.0",
-        "intervention/image": "^2.4"
+        "intervention/image": "^2.4",
+        "monolog/monolog": "^1.23"
     }
 }

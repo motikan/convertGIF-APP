@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Form\ImageFileForm;
 use Application\Model\ImageFile;
+use Application\Utility\ImageUtility;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 
@@ -25,8 +26,6 @@ class ImageFileController extends AbstractRestfulController
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $ipaddr = $request->getServer('REMOTE_ADDR');
-
             $form = new ImageFileForm();
             $imageFile = new ImageFile();
             $form->setInputFilter($imageFile->getInputFilter());
@@ -47,9 +46,13 @@ class ImageFileController extends AbstractRestfulController
 
             $form->setData($post);
 
+            // 妥当性チェック
             if ($form->isValid()) {
                 $imageFile->exchangeArray($post);
-                $this->getImageFileTable()->saveImageFile($imageFile, $ipaddr);
+                $ipAddress = $request->getServer('REMOTE_ADDR');
+                $this->getImageFileTable()->saveImageFile($imageFile, $ipAddress);
+
+                ImageUtility::convertGif($imageFile->imageName);
 
                 return $this->redirect()->toRoute("home");
             }
