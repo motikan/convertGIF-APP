@@ -14,3 +14,5 @@ vendor/
 *.jpeg
 *.png
 *.gif
+data/log/*
+!data/log/.keep
