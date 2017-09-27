@@ -11,8 +11,10 @@ class ImageUtility
 {
     // 画像の保存先ディレクトリ
     const IMAGE_SAVE_DIR = '/data';
+    const GIF_SAVE_DIR = '/public/img/result';
 
-    public static function convertGif($baseFullFileName, $widthSize = 600, $moveSize = 60, $loopSpeed = 10){
+    public static function convertGif($insertItemId, $baseFullFileName, $widthSize = 600, $moveSize = 60, $loopSpeed =
+    10){
         $log = new Logger('convertGif');
         $log->pushHandler(new StreamHandler(getcwd().'/data/log/ImageUtility.log', Logger::WARNING));
 
@@ -49,11 +51,15 @@ class ImageUtility
             unlink($file);
         }
 
+        // GIFファイルの作成
         $gc = new GifCreator();
         $gc->create($frames, $durations, 0); // 0:None stop
         $gifBinary = $gc->getGif();
-        $resultGifFileName = $baseFileName .'.gif';
-        file_put_contents(getcwd() . self::IMAGE_SAVE_DIR . '/' . $resultGifFileName, $gifBinary);
+
+        // GIFファイルの保存
+        $resultGifFileName = $insertItemId . $baseFileName .'.gif';
+        file_put_contents(getcwd() . self::GIF_SAVE_DIR . '/' . $resultGifFileName, $gifBinary);
+
         return $resultGifFileName;
     }
 

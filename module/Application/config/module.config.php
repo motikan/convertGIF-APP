@@ -36,6 +36,16 @@ return array(
                     ),
                 )
             ),
+            'result' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/result/[:gif]',
+                    'defaults' => array(
+                        'controller'    => 'ImageFile',
+                        'action'        => 'result',
+                    ),
+                )
+            ),
         ),
     ),
     'service_manager' => array(
