@@ -7,6 +7,7 @@ use Application\Model\ImageFile;
 use Application\Utility\ImageUtility;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class ImageFileController extends AbstractRestfulController
 {
@@ -22,6 +23,12 @@ class ImageFileController extends AbstractRestfulController
         return $this->imageFileTable;
     }
 
+    /**
+     * 画像をGIFに変換
+     * POST /convert
+     *
+     * @return \Zend\Http\Response|JsonModel
+     */
     public function convertAction()
     {
         $request = $this->getRequest();
@@ -50,16 +57,25 @@ class ImageFileController extends AbstractRestfulController
             if ($form->isValid()) {
                 $imageFile->exchangeArray($post);
                 $ipAddress = $request->getServer('REMOTE_ADDR');
-                $this->getImageFileTable()->saveImageFile($imageFile, $ipAddress);
+                $insertItemId = $this->getImageFileTable()->saveImageFile($imageFile, $ipAddress);
 
-                ImageUtility::convertGif($imageFile->imageName);
+                $resultGifFileName = ImageUtility::convertGif($insertItemId, $imageFile->imageName);
 
-                return $this->redirect()->toRoute("home");
+                return $this->redirect()->toUrl("/result/" . $resultGifFileName);
             }
 
             return new JsonModel($form->getMessages());
         }
         return $this->redirect()->toRoute('home');
+    }
+
+    public function resultAction()
+    {
+        $gifFileName = $this->params()->fromRoute('gif', 'none');
+        $data = [
+            'gifFileName' => $gifFileName,
+        ];
+        return new ViewModel($data);
     }
 
 }
