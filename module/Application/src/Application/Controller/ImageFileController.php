@@ -59,6 +59,7 @@ class ImageFileController extends AbstractRestfulController
                 $ipAddress = $request->getServer('REMOTE_ADDR');
                 $insertItemId = $this->getImageFileTable()->saveImageFile($imageFile, $ipAddress);
 
+                // GIF画像の生成
                 $resultGifFileName = ImageUtility::convertGif($insertItemId, $imageFile->imageName);
 
                 return $this->redirect()->toUrl("/result/" . $resultGifFileName);
