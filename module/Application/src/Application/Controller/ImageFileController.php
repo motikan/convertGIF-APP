@@ -6,7 +6,6 @@ use Application\Form\ImageFileForm;
 use Application\Model\ImageFile;
 use Application\Utility\ImageUtility;
 use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class ImageFileController extends AbstractRestfulController
@@ -27,7 +26,7 @@ class ImageFileController extends AbstractRestfulController
      * 画像をGIFに変換
      * POST /convert
      *
-     * @return \Zend\Http\Response|JsonModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function convertAction()
     {
@@ -36,7 +35,6 @@ class ImageFileController extends AbstractRestfulController
             $form = new ImageFileForm();
             $imageFile = new ImageFile();
             $form->setInputFilter($imageFile->getInputFilter());
-
 
             // 画像ファイルの変更
             $file = $this->getRequest()->getFiles();
@@ -64,8 +62,12 @@ class ImageFileController extends AbstractRestfulController
 
                 return $this->redirect()->toUrl("/result/" . $resultGifFileName);
             }
-
-            return new JsonModel($form->getMessages());
+            $view = new ViewModel([
+                'form' => $form,
+                'errors' => $form->getMessages(),
+            ]);
+            $view->setTemplate('application/index/index.phtml');
+            return $view;
         }
         return $this->redirect()->toRoute('home');
     }

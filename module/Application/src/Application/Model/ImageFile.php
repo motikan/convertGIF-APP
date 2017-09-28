@@ -33,22 +33,21 @@ class ImageFile implements InputFilterAwareInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
 
-            $inputFilter->add(array(
+            $inputFilter->add([
                 'name' => 'image',
                 'required' => true,
-                'error_message' => '画像を選択してください',
-                'validators' => array(
-                    array (
+                'validators' => [
+                    [
                         'name' => 'fileisimage',
-                    ),
-                    array(
+                    ],
+                    [
                         'name' => 'filesize',
-                        'options' => array(
+                        'options' => [
                             'max' => '4MB'
-                        ),
-                    ),
-                ),
-            ));
+                        ],
+                    ],
+                ],
+            ]);
 
             $fileInput = new FileInput('image');
             $fileInput->setRequired(true);
