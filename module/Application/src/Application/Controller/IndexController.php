@@ -14,7 +14,6 @@ class IndexController extends AbstractActionController
         $form = new ImageFileForm();
         $imageFile = new ImageFile();
         $form->bind($imageFile);
-
         $view = new ViewModel(array('form' => $form));
         return $view;
     }
