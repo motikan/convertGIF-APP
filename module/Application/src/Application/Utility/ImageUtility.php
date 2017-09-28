@@ -13,8 +13,9 @@ class ImageUtility
     const IMAGE_SAVE_DIR = '/data';
     const GIF_SAVE_DIR = '/public/img/result';
 
-    public static function convertGif($insertItemId, $baseFullFileName, $widthSize = 600, $moveSize = 60, $loopSpeed =
-    10){
+    public static function convertGif($insertItemId, $baseFullFileName, $outImageWidth = 600, $moveSize = 60,
+        $loopSpeed
+    = 10){
         $log = new Logger('convertGif');
         $log->pushHandler(new StreamHandler(getcwd().'/data/log/ImageUtility.log', Logger::WARNING));
 
@@ -22,6 +23,19 @@ class ImageUtility
         $baseImg = Image::make(getcwd() . self::IMAGE_SAVE_DIR . '/' . $baseFullFileName);
         $imageWidth = $baseImg->getWidth();
         $imageHeight = $baseImg->getHeight();
+
+        // 画像の高さを400px以下にする
+        if($imageHeight > 400){
+            $scale = 400 / $imageHeight;
+            $baseImg->resize(floor($imageWidth * $scale), floor($imageHeight * $scale));
+            $imageWidth = $baseImg->getWidth();
+            $imageHeight = $baseImg->getHeight();
+        }
+
+        // 出力画像幅より元画像幅が小さい場合は、元画像幅にする
+        if($imageWidth < $outImageWidth){
+            $outImageWidth = $imageWidth;
+        }
 
         // 拡張子なしファイル名
         $baseFileName = self::getFileExtension($baseFullFileName);
@@ -32,13 +46,13 @@ class ImageUtility
         $durations = [];
         for ($i=0; $i < $moveSize; $i++){
             $img = clone $baseImg;
-            if($cropX * $i > $imageWidth - $widthSize){
+            if($cropX * $i > $imageWidth - $outImageWidth && $i !== 0){
                 // 最初と最後のフレームで一時停止
                 $durations[0] = 50;
                 $durations[$i-1] = 50;
                 break;
             }
-            $after = $img->crop($widthSize, $imageHeight, $cropX * $i, 0);
+            $after = $img->crop($outImageWidth, $imageHeight, $cropX * $i, 0);
             $fileName = getcwd() . self::IMAGE_SAVE_DIR . '/' . $baseFileName .  "_" . $i . ".png";
             $after->save($fileName);
             $frames[] = imagecreatefrompng($fileName);
