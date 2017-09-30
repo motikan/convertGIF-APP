@@ -16,8 +16,13 @@
           画像を選択<?php echo $this->formElement($this->form->get('image')); ?>
         </span>
       </label>
+      <input id="file-name" type="text" class="form-control" disabled />
     </div>
-    <?php echo $this->formElement($this->form->get('submit')); ?>
+    <div class="form-group" style="margin-top: 10px">
+      <div class="col-md-12">
+        <?php echo $this->formElement($this->form->get('submit')); ?>
+      </div>
+    </div>
     <?php echo $this->formElement($this->form->get('csrf')); ?>
     <?php echo $this->form()->closeTag($form); ?>
   </div>
@@ -29,6 +34,10 @@
         if (!files.length || !window.FileReader){
             return;
         }
+
+        // 画像ファイル名を表示
+        $('#file-name').val($(this).prop('files')[0].name);
+
         if (/^image/.test(files[0].type)){
             var reader = new FileReader();
             reader.readAsDataURL(files[0]);
