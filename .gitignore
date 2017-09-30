@@ -14,5 +14,7 @@ vendor/
 *.jpeg
 *.png
 *.gif
+!noimage.png
+!brickwall.png
 data/log/*
 !data/log/.keep
