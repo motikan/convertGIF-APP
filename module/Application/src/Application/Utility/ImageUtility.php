@@ -13,9 +13,7 @@ class ImageUtility
     const IMAGE_SAVE_DIR = '/data';
     const GIF_SAVE_DIR = '/public/img/result';
 
-    public static function convertGif($insertItemId, $baseFullFileName, $outImageWidth = 600, $moveSize = 60,
-        $loopSpeed
-    = 10){
+    public static function convertGif($insertItemId, $baseFullFileName, $outImageWidth, $moveSize, $loopSpeed){
         $log = new Logger('convertGif');
         $log->pushHandler(new StreamHandler(getcwd().'/data/log/ImageUtility.log', Logger::WARNING));
 
@@ -46,6 +44,7 @@ class ImageUtility
         $durations = [];
         for ($i=0; $i < $moveSize; $i++){
             $img = clone $baseImg;
+
             if($cropX * $i > $imageWidth - $outImageWidth && $i !== 0){
                 // 最初と最後のフレームで一時停止
                 $durations[0] = 50;
@@ -84,6 +83,24 @@ class ImageUtility
      */
     public static function getFileExtension($fileBaseName){
         return pathinfo($fileBaseName, PATHINFO_FILENAME);
+    }
+
+    public static function getTransSpeed($speedParam){
+        $speedTable = self::getTransSpeedTableArray();
+        return $speedTable[$speedParam];
+    }
+
+    public static function getTransSpeedTableArray(){
+        return [
+            '0' => 5,
+            '10' => 10,
+            '20' => 20,
+        ];
+    }
+
+    public static function getTransSpeedKeysArray(){
+        $speedTable = self::getTransSpeedTableArray();
+        return array_keys($speedTable);
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Application\Utility\ImageUtility;
 use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -45,6 +46,24 @@ class ImageFile implements InputFilterAwareInterface
                         'options' => [
                             'max' => '4MB'
                         ],
+                    ],
+                ],
+            ]);
+
+            $inputFilter->add([
+                'name' => 'speed',
+                'required' => true,
+                'validators' => [
+                    [
+                        'name' => 'InArray',
+                        'break_chain_on_failure' => true,
+                        'options' => [
+                            'haystack' => ImageUtility::getTransSpeedKeysArray(),
+                        ],
+                    ],
+                    [
+                        'name' => 'NotEmpty',
+                        'break_chain_on_failure' => true,
                     ],
                 ],
             ]);
