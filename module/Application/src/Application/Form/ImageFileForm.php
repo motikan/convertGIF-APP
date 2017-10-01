@@ -23,6 +23,7 @@ class ImageFileForm extends Form
         $this->setAttribute('action', '/convert');
         $this->setAttribute('method', 'post');
         $this->setAttribute('class', 'form-horizontal');
+
         $this->add(new Csrf('csrf'));
 
         $this->add(array(
@@ -35,6 +36,22 @@ class ImageFileForm extends Form
                 'accept' => 'image/*',
             ),
             'type'  => 'Zend\Form\Element\File',
+        ));
+
+        $this->add(array(
+            'name' => 'speed',
+            'options' => array(
+                'value_options' => array(
+                    '0' => '0.05 ',
+                    '10' => '0.1',
+                    '20' => '0.2',
+                ),
+            ),
+            'attributes' => array(
+                'class' => 'form-control',
+                'value' => '10',
+            ),
+            'type'  => 'Zend\Form\Element\Select',
         ));
 
         $this->add(array(
