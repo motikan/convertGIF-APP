@@ -42,9 +42,9 @@ class ImageFileForm extends Form
             'name' => 'speed',
             'options' => array(
                 'value_options' => array(
-                    '0' => '0.05 ',
-                    '10' => '0.1',
-                    '20' => '0.2',
+                    '20' => 'Slow',
+                    '10' => 'Normal',
+                    '0' => 'Fast',
                 ),
             ),
             'attributes' => array(
