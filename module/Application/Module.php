@@ -9,6 +9,10 @@
 
 namespace Application;
 
+use Application\Model\ImageFile;
+use Application\Model\ImageFileTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
@@ -34,6 +38,22 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
             ),
+        );
+    }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Application\Model\ImageFileTable' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new ImageFile());
+                    $tableGateway = new TableGateway('image', $dbAdapter, null, $resultSetPrototype);
+                    $table = new ImageFileTable($tableGateway);
+                    return $table;
+                }
+            )
         );
     }
 }

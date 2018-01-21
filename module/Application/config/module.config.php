@@ -8,47 +8,43 @@
  */
 
 return array(
+    'controllers' => array(
+        'invokables' => array(
+            'Index' => 'Application\Controller\IndexController',
+            'ImageFile' => 'Application\Controller\ImageFileController'
+        ),
+    ),
     'router' => array(
         'routes' => array(
             'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => 'Literal',
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => 'Index',
                         'action'     => 'index',
                     ),
                 ),
             ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
+            'convert' => array(
                 'type'    => 'Literal',
                 'options' => array(
-                    'route'    => '/application',
+                    'route'    => '/convert',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
+                        'controller'    => 'ImageFile',
+                        'action'        => 'convert',
                     ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
+                )
+            ),
+            'result' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/result/[:gif]',
+                    'defaults' => array(
+                        'controller'    => 'ImageFile',
+                        'action'        => 'result',
                     ),
-                ),
+                )
             ),
         ),
     ),
@@ -71,12 +67,10 @@ return array(
             ),
         ),
     ),
-    'controllers' => array(
-        'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
-        ),
-    ),
     'view_manager' => array(
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',

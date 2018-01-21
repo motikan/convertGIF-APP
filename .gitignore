@@ -15,3 +15,8 @@ data/*.jpg
 data/*.png
 public/img/result/
 data/log/*.log
+
+!noimage.png
+!brickwall.png
+data/log/*
+!data/log/.keep
